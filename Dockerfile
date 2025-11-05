@@ -1,7 +1,7 @@
 # Dockerfile pour Symfony UX Demo avec FrankenPHP
 FROM dunglas/frankenphp:latest
 
-# Installation de Node.js 20.x
+# Installation de Node.js 20.x et extension intl
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Installer l'extension PHP intl
+RUN install-php-extensions intl
 
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

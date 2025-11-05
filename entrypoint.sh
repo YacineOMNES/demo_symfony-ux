@@ -28,6 +28,10 @@ if [ -d "var" ]; then
     chmod -R 775 var
 fi
 
+# Installer les dépendances PHP avec Composer
+echo "📦 Installing PHP dependencies with Composer..."
+composer install --no-interaction --prefer-dist --optimize-autoloader
+
 # Clear and warm up the Symfony cache
 if [ "$APP_ENV" != "prod" ]; then
     echo "🧹 Clearing Symfony cache..."
@@ -37,8 +41,12 @@ if [ "$APP_ENV" != "prod" ]; then
 fi
 
 echo "================================================"
-echo "🚀 Starting FrankenPHP server..."
+echo "🚀 Starting FrankenPHP server in worker mode..."
 echo "================================================"
+
+# Définir la configuration FrankenPHP pour le mode worker
+export FRANKENPHP_CONFIG="worker ./public/index.php"
+export APP_RUNTIME="Runtime\\FrankenPhpSymfony\\Runtime"
 
 # Démarrer FrankenPHP
 exec frankenphp run --config /etc/caddy/Caddyfile
